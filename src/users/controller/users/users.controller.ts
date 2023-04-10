@@ -6,34 +6,31 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Req,
-  Res,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
-import { RoleGuard } from 'src/guards/roleGuard';
-import { UserGuard } from 'src/guards/userGuard';
+import { RoleGuard } from 'src/core/guards/roleGuard';
+import { UserGuard } from 'src/core/guards/userGuard';
 import { UserDto } from 'src/users/dto/user.dto';
 import { UsersService } from 'src/users/service/users/users.service';
 
-@UseGuards(UserGuard)
-@UseGuards(RoleGuard)
 @Controller('api/v1/users')
 export class UsersController {
   constructor(private userService: UsersService) {}
-  @Get('/')
+  @Get()
   async getUsers() {
     return this.userService.findUsers();
   }
 
-  @Post('/')
-  async createUser(@Body() creatUserDto: UserDto) {
+  @Post()
+  async createUser(@Body(new ValidationPipe()) creatUserDto: UserDto) {
     return this.userService.createUser(creatUserDto);
   }
 
-  @Patch('/:id')
+  @UseGuards(RoleGuard)
+  @Patch(':id')
   async updateUser(
-    @Body() updateUserDto: UserDto,
+    @Body(new ValidationPipe()) updateUserDto: UserDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.userService.updateUser(updateUserDto, Number(id));

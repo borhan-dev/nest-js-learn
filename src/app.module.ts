@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './entities/User';
 import { LoggerMiddleware } from './middleware/logger';
+import Posts from './entities/Posts';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { LoggerMiddleware } from './middleware/logger';
       username: 'root',
       password: '66043322Ab-',
       database: 'nestjs',
-      entities: [User],
+      entities: [User, Posts],
       synchronize: true,
     }),
     UsersModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

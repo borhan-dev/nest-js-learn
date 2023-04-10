@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 
-export function Auth(...roles: Role[]) {
+export function Auth(...roles: string[]) {
   return applyDecorators(
     SetMetadata('roles', roles),
     UseGuards(AuthGuard, RolesGuard),

@@ -1,10 +1,13 @@
+import { UserRole } from 'src/type';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Posts from './Posts';
 
 @Entity()
 export class User {
@@ -23,6 +26,11 @@ export class User {
   @Column()
   email: string;
 
+  @Column({ default: UserRole.user, type: 'enum', enum: UserRole })
+  role: UserRole;
+
+  @OneToMany(() => Posts, (po) => po.user, { eager: true })
+  posts: Posts[];
   @CreateDateColumn()
   created_at: Date;
 
